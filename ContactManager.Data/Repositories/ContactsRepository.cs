@@ -40,6 +40,30 @@ namespace ContactManager.Data.Repositories
             return ContactToViewModel(contact);
         }
 
+        public IEnumerable<ContactViewModel> Search(string email, string city)
+        {
+            try
+            {
+                var searchByEmail = !string.IsNullOrWhiteSpace(email);
+                var searchByCity = !string.IsNullOrWhiteSpace(city);
+
+                var contacts = _context.Contacts.Where(c => (searchByEmail ? c.Email.ToUpper().Contains(email.ToUpper()) : true)
+                                                            && (searchByCity ? c.City.ToUpper().Contains(city.ToUpper()) : true)
+                                                      ).ToList();
+                
+                var searchResults = new List<ContactViewModel>();
+                
+                foreach (var item in contacts)
+                    searchResults.Add(ContactToViewModel(item));
+
+                return searchResults;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public ContactViewModel Create(ContactViewModel contact)
         {
             var contactModel = ContactToModel(contact);

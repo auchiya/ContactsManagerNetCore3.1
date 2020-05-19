@@ -52,6 +52,25 @@ namespace ContactManager.Api.Controllers
             }
         }
 
+        [Route("Search")]
+        [HttpGet("{email,city}")]
+        public IActionResult Search(string email, string city)
+        {
+            try
+            {
+                var repoContacts = new ContactsRepository(_context);
+                var searchResult = repoContacts.Search(email, city);
+                if (searchResult.Any())
+                    return Ok(searchResult);
+
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         [HttpPost]
         public IActionResult Post([FromBody] ContactViewModel contact)
         {
