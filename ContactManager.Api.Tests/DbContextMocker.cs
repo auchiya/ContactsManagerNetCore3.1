@@ -1,28 +1,35 @@
 ﻿using ContactManager.Data;
 using ContactManager.Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace ContactManager.Api
+namespace ContactManager.Api.Tests
 {
-    public class DataGenerator
+    public static class DbContextMocker
     {
-        public static void Initialize(IServiceProvider serviceProvider)
+        public static ContactsDbContext GetContactsDbContext(string dbName)
         {
-            using (var context = new ContactsDbContext(
-            serviceProvider.GetRequiredService<DbContextOptions<ContactsDbContext>>()))
-            {
-                if (context.Contacts.Any())
-                {
-                    return;
-                }
+            // Create options for DbContext instance
+            var options = new DbContextOptionsBuilder<ContactsDbContext>()
+                .UseInMemoryDatabase(databaseName: dbName)
+                .Options;
 
-                context.Contacts.AddRange(
-                                new Contact
+            // Create instance of DbContext
+            var dbContext = new ContactsDbContext(options);
+
+            // Add entities in memory
+            Initialize(dbContext);
+
+            return dbContext;
+        }
+
+        public static void Initialize(ContactsDbContext context)
+        {
+            context.Contacts.AddRange(
+                            new Contact
                             {
                                 Id = 1,
                                 BirthDate = new DateTime(1993, 1, 26),
@@ -62,10 +69,10 @@ namespace ContactManager.Api
                                 Address = "741 Wood house",
                                 City = "Kirkwall"
                             }
-                                );
+                            );
 
-                context.SaveChanges();
-            }
+            context.SaveChanges();
         }
     }
 }
+

@@ -40,19 +40,42 @@ namespace ContactManager.Data.Repositories
             return ContactToViewModel(contact);
         }
 
-        public IEnumerable<ContactViewModel> Search(string email, string city)
+        public IEnumerable<ContactViewModel> Search(string email, string phone)
         {
             try
             {
                 var searchByEmail = !string.IsNullOrWhiteSpace(email);
-                var searchByCity = !string.IsNullOrWhiteSpace(city);
+                var searchByPhone = !string.IsNullOrWhiteSpace(phone);
 
                 var contacts = _context.Contacts.Where(c => (searchByEmail ? c.Email.ToUpper().Contains(email.ToUpper()) : true)
-                                                            && (searchByCity ? c.City.ToUpper().Contains(city.ToUpper()) : true)
+                                                            && ((searchByPhone ? c.PhonePersonal.ToUpper().Contains(phone.ToUpper()) : true)
+                                                                || (searchByPhone ? c.PhoneWork.ToUpper().Contains(phone.ToUpper()) : true))
                                                       ).ToList();
                 
                 var searchResults = new List<ContactViewModel>();
                 
+                foreach (var item in contacts)
+                    searchResults.Add(ContactToViewModel(item));
+
+                return searchResults;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public IEnumerable<ContactViewModel> Search(string city)
+        {
+            try
+            {
+                var searchByCity = !string.IsNullOrWhiteSpace(city);
+
+                var contacts = _context.Contacts.Where(c => (searchByCity ? c.City.ToUpper().Equals(city.ToUpper()) : true)
+                                                      ).ToList();
+
+                var searchResults = new List<ContactViewModel>();
+
                 foreach (var item in contacts)
                     searchResults.Add(ContactToViewModel(item));
 
@@ -98,7 +121,9 @@ namespace ContactManager.Data.Repositories
             viewModel.PhonePersonal = contact.PhonePersonal;
             viewModel.PhoneWork = contact.PhoneWork;
             viewModel.ProfileImage = contact.ProfileImage;
-            
+            viewModel.City = contact.City;
+            viewModel.Address = contact.Address;
+
             return viewModel;
         }
 
@@ -113,7 +138,8 @@ namespace ContactManager.Data.Repositories
             model.PhonePersonal = contact.PhonePersonal;
             model.PhoneWork = contact.PhoneWork;
             model.ProfileImage = contact.ProfileImage;
-
+            model.City = contact.City;
+            model.Address = contact.Address;
             return model;
         }
 

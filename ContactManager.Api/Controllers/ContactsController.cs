@@ -61,18 +61,41 @@ namespace ContactManager.Api.Controllers
         }
 
         /// <summary>
-        /// Search in all the contacts by email or city
+        /// Search in all the contacts by city
         /// </summary>
-        /// <param name="email"></param>
         /// <param name="city"></param>
-        /// <returns>A list of contacts that matches with the search params</returns>
-        [HttpGet("search")]
-        public IActionResult Search([FromQuery] string email, [FromQuery] string city)
+        /// <returns>A list of contacts that matches with the city</returns>
+        [HttpGet("city")]
+        public IActionResult Search([FromQuery] string city)
         {
             try
             {
                 var repoContacts = new ContactsRepository(_context);
-                var searchResult = repoContacts.Search(email, city);
+                var searchResult = repoContacts.Search(city);
+                if (searchResult.Any())
+                    return Ok(searchResult);
+
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Search in all the contacts by email or phone
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="phone"></param>
+        /// <returns>A list of contacts that matches with the search params</returns>
+        [HttpGet("search")]
+        public IActionResult Search([FromQuery] string email, [FromQuery] string phone)
+        {
+            try
+            {
+                var repoContacts = new ContactsRepository(_context);
+                var searchResult = repoContacts.Search(email, phone);
                 if (searchResult.Any())
                     return Ok(searchResult);
 
@@ -99,7 +122,9 @@ namespace ContactManager.Api.Controllers
         ///        "Email":"burns@excelent.com",
         ///        "BirthDate":"1712-01-02",
         ///        "PhonePersonal":"666",
-        ///        "PhoneWork":"666666"
+        ///        "PhoneWork":"666666",
+        ///        "address": "666 Nuclear Plant",
+        ///        "city": "Spingfield"
         ///     }
         ///
         /// </remarks>
@@ -132,14 +157,16 @@ namespace ContactManager.Api.Controllers
         ///
         ///     PUT /
         ///     {
-        ///        "Id":3,
+        ///        "Id":4,
         ///        "Name":"Montgomery Burns",
         ///        "Company":"Springfield Nuclear Plant",
         ///        "ProfileImage":"Base64String Image or Image Url",
         ///        "Email":"montgomery@burns.com",
         ///        "BirthDate":"1705-01-02",
         ///        "PhonePersonal":"777",
-        ///        "PhoneWork":"7777"
+        ///        "PhoneWork":"7777",
+        ///        "address": "999 Nuclear Plant",
+        ///        "city": "Spingfield West"
         ///     }
         ///
         /// </remarks>
