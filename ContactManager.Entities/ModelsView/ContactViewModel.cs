@@ -9,7 +9,7 @@ namespace ContactManager.Entities.Models
     {
         [Required]
         public int Id { get; set; }
-        
+
         public string Name { get; set; }
 
         public string Company { get; set; }
@@ -26,13 +26,15 @@ namespace ContactManager.Entities.Models
         public DateTime? BirthDate { get; set; }
 
         public string PhonePersonal { get; set; }
-        
+
         public string PhoneWork { get; set; }
 
         public string Address { get; set; }
-        
+
         [Display(Name = "City/State")]
         public string City { get; set; }
+
+        public string FullAddress { get { return string.Format("{0} - {1}", Address, City); } }
 
     }
 }
