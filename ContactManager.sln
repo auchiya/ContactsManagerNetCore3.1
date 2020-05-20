@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManager.Data", "Cont
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManager.Entities", "ContactManager.Entities\ContactManager.Entities.csproj", "{B02ACDE7-0AA8-4932-98E9-8B290BAE5758}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManager.Api.Tests", "ContactManager.Api.Tests\ContactManager.Api.Tests.csproj", "{3726C60F-9EA0-4142-ADC1-95E1F276A67B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManager.Api.Tests", "ContactManager.Api.Tests\ContactManager.Api.Tests.csproj", "{3726C60F-9EA0-4142-ADC1-95E1F276A67B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D728BB87-2968-4740-AA98-3BC8F6DAEED5}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.md = LICENSE.md
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
