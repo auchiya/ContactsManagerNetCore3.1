@@ -52,9 +52,8 @@ namespace ContactManager.Api.Controllers
             }
         }
 
-        [Route("Search")]
-        [HttpGet("{email,city}")]
-        public IActionResult Search(string email, string city)
+        [HttpGet("search")]
+        public IActionResult Search([FromQuery] string email, [FromQuery] string city)
         {
             try
             {
