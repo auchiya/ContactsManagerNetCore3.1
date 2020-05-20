@@ -20,6 +20,9 @@ namespace ContactManager.Api.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Gets a list with al the contacts
+        /// </summary>
         [HttpGet]
         public IActionResult Get()
         {
@@ -35,6 +38,11 @@ namespace ContactManager.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Get a specific contact by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>The contact searched</returns>
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -52,6 +60,12 @@ namespace ContactManager.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Search in all the contacts by email or city
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="city"></param>
+        /// <returns>A list of contacts that matches with the search params</returns>
         [HttpGet("search")]
         public IActionResult Search([FromQuery] string email, [FromQuery] string city)
         {
@@ -70,6 +84,27 @@ namespace ContactManager.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new contact
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /
+        ///     {
+        ///        "Id":0,
+        ///        "Name":"Montgomery Burns",
+        ///        "Company":"Springfield Nuclear Plant",
+        ///        "ProfileImage":"Base64String Image or Image Url",
+        ///        "Email":"burns@excelent.com",
+        ///        "BirthDate":"1712-01-02",
+        ///        "PhonePersonal":"666",
+        ///        "PhoneWork":"666666"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="contact"></param>
+        /// <returns>The contact created</returns>
         [HttpPost]
         public IActionResult Post([FromBody] ContactViewModel contact)
         {
@@ -78,8 +113,8 @@ namespace ContactManager.Api.Controllers
                 if (ModelState.IsValid)
                 {
                     var repoContacts = new ContactsRepository(_context);
-                    repoContacts.Create(contact);
-                    return Created("newContact", contact);
+                    var createdContact = repoContacts.Create(contact);
+                    return Created("newContact", createdContact);
                 }
                 return BadRequest(ModelState);
             }
@@ -89,8 +124,29 @@ namespace ContactManager.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates contact information
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT /
+        ///     {
+        ///        "Id":3,
+        ///        "Name":"Montgomery Burns",
+        ///        "Company":"Springfield Nuclear Plant",
+        ///        "ProfileImage":"Base64String Image or Image Url",
+        ///        "Email":"montgomery@burns.com",
+        ///        "BirthDate":"1705-01-02",
+        ///        "PhonePersonal":"777",
+        ///        "PhoneWork":"7777"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="contact"></param>
+        /// <returns>The contact updated</returns>
         [HttpPut]
-        public IActionResult Put(int id, [FromBody] ContactViewModel contact)
+        public IActionResult Put([FromBody] ContactViewModel contact)
         {
             if (ModelState.IsValid)
             {
@@ -101,6 +157,11 @@ namespace ContactManager.Api.Controllers
             return BadRequest(ModelState);
         }
 
+        /// <summary>
+        /// Delete a contact by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>HttpStatusCode 200</returns>
         [HttpDelete]
         public IActionResult Delete(int id)
         {
